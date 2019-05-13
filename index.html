@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container">
+        <!-- Form 1 -->
+        <div><br>
+            <span>Enter Your Github Profile</span><br>
+            <input type="text" id="txtField"><br>
+            <button onclick="postq()">Save</button>
+        </div>
+        <!-- Form 2 -->
+        <div><br>
+            <span>Enter Your login</span><br>
+            <input type="text" id="gitAcc"><br>
+            <button onclick="makeLink()">Get Link</button>
+        </div>
+        <!-- Link -->
+        <div id="gitLink"><br></div>
+    </div>
+</body>
+
+<style>
+    #gitLink {
+        margin-top: 20px;
+    }
+</style>
+
+<script>
+    function postq() {
+        var login = document.getElementById('txtField').value;
+        fetch('https://cors-anywhere.herokuapp.com/http://nurs.ml/api/tables/', {
+
+                method: 'post',
+                headers: {'Content-Type': 'application/json'},
+
+                body: JSON.stringify({
+                    name_of_tables: login
+                })
+        }).then(res => res.json());
+    }
+
+    function makeLink() {
+        var input = document.getElementById('gitAcc').value;
+        var div = document.getElementById('gitLink');
+        div.innerHTML = '';
+
+        fetch('https://cors-anywhere.herokuapp.com/http://nurs.ml/api/tables/')
+        .then(data => data.json())
+        .then(data => data)
+        .then(function (data) {
+            console.log(input);
+            for(var i = 0; i < data.length; i++) {
+                if(data[i].name_of_tables == input) {
+                    var link = document.createElement('a');
+                    link.setAttribute("href", "https://github.com/" + input);
+                    link.setAttribute("target", "_blank")
+                    link.innerHTML = 'Open ' + input + ' on GitHub';
+                    div.appendChild(link);
+                    break;
+                } 
+            }
+        });
+    }
+</script>
+
+</html>
